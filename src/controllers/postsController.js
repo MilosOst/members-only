@@ -3,6 +3,7 @@ import User from '../models/user.js';
 import Post from '../models/post.js';
 
 
+// Render home page with all posts
 export async function get_home_page(req, res, next) {
     try {
         // Fetch all posts, sorted by date
@@ -14,6 +15,7 @@ export async function get_home_page(req, res, next) {
     }
 }
 
+// Handle post creation
 export const create_post = [
     // Validate and sanitize data
     body('title', 'Title must be specified and between 1 and 60 characters.').trim().isLength({min: 1, max: 60}).escape(),
@@ -44,3 +46,36 @@ export const create_post = [
         }
     }
 ];
+
+// Render delete page for a given Post
+export async function post_delete_get(req, res, next) {
+    // Do not allow access if user is not an admin
+    if (!res.locals?.currentUser?.isAdmin) {
+        res.redirect('/');
+    }
+
+    try {
+        // Verify that post with given id exists,
+        const post = await Post.findById(req.params.post_id);
+
+        if (post) {
+            res.render('post_delete', {post: post})
+        }
+        else {
+            res.render('post_delete');
+        }
+    }
+    catch (err) {
+        return next(err);
+    }
+}
+
+export async function post_delete(req, res, next) {
+    try {
+        await Post.findByIdAndRemove(req.params.post_id);
+        res.redirect('/');
+    }
+    catch (err) {
+        return next(err);
+    }
+}

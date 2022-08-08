@@ -160,6 +160,12 @@ p.date-posted {
   color: gray;
 }
 
-p.post-message {
-  
+/* Delete Post Form */
+.delete-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
 }

@@ -35,6 +35,12 @@ router.get('/log-out', (req, res) => {
 	});
 });
 
+// GET Post delete page
+router.get('/posts/:post_id/delete', postsController.post_delete_get);
+
+// POST method for Post delete page
+router.post('/posts/:post_id/delete', postsController.post_delete);
+
 
 
 

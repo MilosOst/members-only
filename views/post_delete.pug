@@ -1,0 +1,9 @@
+extends layout 
+
+block content 
+    if post 
+        form(method='POST' action=`/posts/${post._id}/delete` class='account-form delete-form')
+            h3 Are you sure you want to delete post with id: #{post._id}
+            button(type='submit' class='submit-btn') Delete  
+    else
+        | Post not found
