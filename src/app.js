@@ -9,6 +9,8 @@ import passport from 'passport';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import * as passportLocal from 'passport-local';
+import * as bcrypt from 'bcryptjs';
+import User from './models/user.js';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -21,6 +23,42 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 db.once('open', () => console.log('Connected to Database'));
 
+// Set up user authentication
+passport.use(
+	new LocalStrategy((username, password, done) => {
+		User.findOne({username: {'$regex': `^${username}$`, $options: 'i'}}, (err, user) => {
+			if (err) {
+				return done(err);
+			}
+			if (!user) {
+				return done(null, false, {message: 'Incorrect username'});
+			}
+			
+			// Verify password
+			bcrypt.compare(password, user.password, (err, res) => {
+				if (res) {
+					// Passwords match, log in
+					return done(null, user);
+				}
+				else {
+					return done(null, false, {message: 'Incorrect Password'});
+				}
+			});
+		});
+	})
+);
+
+
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true}));
@@ -29,6 +67,11 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
+
+app.use(function(req, res, next) {
+	res.locals.currentUser = req.user;
+	next();
+});
 
 // view engine setup
 app.set('view engine', 'pug');
