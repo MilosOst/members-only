@@ -1,13 +1,15 @@
 import express from 'express';
 import * as usersController from '../controllers/usersController.js';
+import * as postsController from '../controllers/postsController.js';
 import passport from 'passport';
 
 const router = express.Router();
 
 // GET home page
-router.get('/', (req, res, next) => {
-  	res.render('index');
-});
+router.get('/', postsController.get_home_page)
+
+// POST home page
+router.post('/', postsController.create_post);
 
 // GET Sign Up Page
 router.get('/sign-up', usersController.signup_get);

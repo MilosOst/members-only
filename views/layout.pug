@@ -11,10 +11,11 @@ body
 		nav.navbar 
 			a(href="/" class='nav-link') Home
 			div 
-				if !currentUser
+				if currentUser
+					a(href='/log-out' class='nav-link') Log Out
+				else
 					a(href="/sign-up" class='nav-link') Sign Up 
 					a(href="/login" class='nav-link') Log In 
-				else 
-					a(href='/log-out' class='nav-link') Log Out
+
 		block content
       
