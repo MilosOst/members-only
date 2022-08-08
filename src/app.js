@@ -23,28 +23,30 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 db.once('open', () => console.log('Connected to Database'));
 
-// Set up user authentication
 passport.use(
-	new LocalStrategy((username, password, done) => {
-		User.findOne({username: {'$regex': `^${username}$`, $options: 'i'}}, (err, user) => {
-			if (err) {
-				return done(err);
-			}
+	new LocalStrategy(async (username, password, done) => {
+		try {
+			const user = await User.findOne({username: username}).collation({locale: 'en', strength: 2});
+
 			if (!user) {
-				return done(null, false, {message: 'Incorrect username'});
+				return done(null, false, {message: 'Incorrect Username'});
 			}
-			
-			// Verify password
+
+			// User found, verify password
 			bcrypt.compare(password, user.password, (err, res) => {
 				if (res) {
-					// Passwords match, log in
+					// Passwords match, log user in
 					return done(null, user);
 				}
 				else {
+					// Wrong password
 					return done(null, false, {message: 'Incorrect Password'});
 				}
 			});
-		});
+		}
+		catch (err) {
+			return done(err);
+		}
 	})
 );
 

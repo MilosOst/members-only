@@ -24,7 +24,6 @@ export function login_get(req, res, next) {
     }
 }
 
-
 // Handle Sign-up page form submission
 export const signup_post = [
     // First, validate and sanitize data
@@ -56,7 +55,7 @@ export const signup_post = [
         else {
             // No Errors, check to see if username is taken
             try {
-                const user = await User.findOne({username: req.body.username}).collation({locale: 'en', strength: 2});
+                const user = await User.findOne({username: req.body.username}).collation({locale: 'en', strength: 2}).exec();
 
                 if (user) {
                     // Username is taken, re render form
@@ -65,7 +64,7 @@ export const signup_post = [
                 }
                 else {
                     // Data is valid, create new user with hashed password
-                    bcrpyt.hash(req.body.password, 10, (err, hashedPassword) => {
+                    bcrpyt.hash(req.body.password, 10, async (err, hashedPassword) => {
                         if (err) return next(err);
 
                         const newUser = new User({
@@ -75,11 +74,8 @@ export const signup_post = [
                             password: hashedPassword,
                         });
 
-                        newUser.save((err) => {
-                            if (err) return next(err);
-    
-                            res.redirect('/');
-                        });
+                        await newUser.save();
+                        res.redirect('/login');
                     });
                 }
             }
