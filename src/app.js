@@ -7,12 +7,19 @@ import indexRouter from './routes/index';
 import dotenv from 'dotenv'
 import passport from 'passport';
 import session from 'express-session';
+import mongoose from 'mongoose';
 import * as passportLocal from 'passport-local';
 
 const LocalStrategy = passportLocal.Strategy;
 
 const app = express();
 dotenv.config();
+
+mongoose.connect(process.env.MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true});
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
+db.once('open', () => console.log('Connected to Database'));
 
 app.use(logger('dev'));
 app.use(express.json());

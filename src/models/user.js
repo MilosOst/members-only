@@ -8,6 +8,7 @@ const UserSchema = new Schema(
         last_name: {type: String, minLength: 1, maxLength: 20, required: true},
         isMember: {type: Boolean, default: false},
         username: {type: String, minLength: 4, maxLength: 15, required: true},
+        password: {type: String, minLength: 5, required: true}
     }
 );
 

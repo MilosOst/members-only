@@ -1,0 +1,14 @@
+extends layout 
+
+block content 
+    form(method="POST" action='/sign-up' class='account-form')
+        h2 Log In
+        p Don't have an account? #[a(href='sign-up' class='account-link') Sign Up]
+        .form-content 
+            .form-field
+                label(for="username" class='form-label') Username
+                input(type="text" name='username' id='username' class='form-input')
+            .form-field
+                label(for="password" class='form-label') Password
+                input(type="text" name='password' id='password' class='form-input')
+            button(type='submit' class='submit-btn') Log In
