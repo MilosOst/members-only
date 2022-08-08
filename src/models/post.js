@@ -11,4 +11,8 @@ const PostSchema = new Schema(
     }
 );
 
+PostSchema.virtual('formatted_date').get(function () {
+    return this.date_posted.toLocaleDateString();
+})
+
 export default mongoose.model('Post', PostSchema);

@@ -14,7 +14,7 @@ const UserSchema = new Schema(
 );
 
 UserSchema.virtual('full_name').get(function() {
-    return this.first_name + ', ' + this._last_name;
+    return this.first_name + ' ' + this.last_name;
 });
 
 export default mongoose.model('User', UserSchema);

@@ -7,7 +7,24 @@ block content
 				input(type="text" name='title' placeholder='Add a title' class='form-input'
 					minlength="1" maxlength="60" required value=(post ? post.title : ''))
 				textarea(name="content", cols="10", rows="4" class='form-input posting-content' minlength="1" maxlength="400"
-					placeholder="Enter your message here" required value=(post ? post.content : ''))
+					placeholder="Enter your message here" required)
+					if post 
+						#{post.content}
+				if errors 
+					each error in errors 
+						p #{error.msg}
 				button(type='submit' class='submit-btn') Add Post
+		if posts 
+			each post in posts 
+				figure.posting 
+					h3.post-title #{post.title}
+					.post-info 
+						if currentUser 
+							p.author #{post.user.full_name}
+						else 
+							p.author Anonymous
+						p.date-posted #{post.formatted_date}
+					p.post-message #{post.content}
+
 				
     
