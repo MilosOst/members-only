@@ -1,0 +1,19 @@
+extends layout 
+
+block content 
+    .membership-page
+        if !currentUser
+            h1 You must be logged in to access this page
+        else if currentUser.isMember 
+            h1 You are already a member.
+        else 
+            form(method="POST" action="/membership" class='account-form') 
+                .form-field 
+                    label(for="answer" class='form-label' required) What is always in front of you but you can't see it?
+                    input(type="text" class='form-input' id='answer' name='answer')
+
+                    if errors 
+                        ul.errors 
+                            each error in errors 
+                                li!= error.msg
+                button(type='submit' class='submit-btn') Submit

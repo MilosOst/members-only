@@ -41,6 +41,10 @@ router.get('/posts/:post_id/delete', postsController.post_delete_get);
 // POST method for Post delete page
 router.post('/posts/:post_id/delete', postsController.post_delete);
 
+// GET method for membership page
+router.get('/membership', usersController.membership_get);
+
+router.post('/membership', usersController.membership_post);
 
 
 

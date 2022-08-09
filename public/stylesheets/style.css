@@ -169,3 +169,16 @@ p.date-posted {
   gap: 1rem;
   text-align: center;
 }
+
+/* Membership Page */
+.membership-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.errors {
+  list-style: none;
+  color: red;
+}

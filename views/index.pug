@@ -19,15 +19,14 @@ block content
 				figure.posting 
 					h3.post-title #{post.title}
 					.post-info 
-						if currentUser 
+						if currentUser && (currentUser.isMember || currentUser.isAdmin) 
 							p.author #{post.user.full_name}
 						else 
 							p.author Anonymous
 						p.date-posted #{post.formatted_date}
 					p #{post.content}
-					if currentUser
-						if currentUser.isAdmin
-							a(href=`/posts/${post._id}/delete`) Delete 
+					if currentUser && currentUser.isAdmin
+						a(href=`/posts/${post._id}/delete`) Delete 
 
 				
     

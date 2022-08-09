@@ -85,3 +85,31 @@ export const signup_post = [
         }
     }
 ];
+
+// Display membership page
+export function membership_get(req, res, next) {
+    res.render('membership');
+}
+
+export const membership_post = [
+    body('answer', 'Incorrect answer. Try again.').trim().escape().toLowerCase().isIn(['future', 'the future']),
+
+    // Process request
+    async (req, res, next) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            res.render('membership', {errors: errors.array()})
+        }
+        else {
+            try {
+                // Correct answer, grant user member status
+                await User.findByIdAndUpdate(res.locals.currentUser._id, {isMember: true});
+                res.redirect('/');
+            }
+            catch (err) {
+                return next(err);
+            }
+        }   
+    }
+];
