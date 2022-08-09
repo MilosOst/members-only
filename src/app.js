@@ -99,4 +99,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log('Express server listening on port', port)
+});
+
 export default app;
